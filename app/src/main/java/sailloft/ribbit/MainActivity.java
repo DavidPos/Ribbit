@@ -33,6 +33,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
+
     ViewPager mViewPager;
 
     @Override
