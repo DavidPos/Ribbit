@@ -19,7 +19,7 @@
     <string name="sign_up_error_title">OOPS!!</string>
     <string name="login_error_message">Please make sure you entered the username and password!</string>
     <string name="login_error_title">OOPS!!</string>
-
+    <string name="menu_logout_label">Logout</string>
 
 
 

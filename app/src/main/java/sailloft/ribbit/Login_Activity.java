@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class Login_Activity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         mUsername = (EditText)findViewById(R.id.usernameField);
         mPassword = (EditText)findViewById(R.id.passwordField);
 
@@ -51,9 +53,11 @@ public class Login_Activity extends Activity {
                 }
                 else {
                     //Login here
+                    setProgressBarVisibility(true);
                     ParseUser.logInInBackground(username,password,new LogInCallback() {
                         @Override
                         public void done(ParseUser user, ParseException e) {
+                            setProgressBarVisibility(false);
                             if (e == null){
                                 //success
                                 Intent intent = new Intent(Login_Activity.this,MainActivity.class);
