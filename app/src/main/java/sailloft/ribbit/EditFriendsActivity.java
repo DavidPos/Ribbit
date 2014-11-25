@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 
 public class EditFriendsActivity extends Activity {
 
@@ -14,6 +17,13 @@ public class EditFriendsActivity extends Activity {
         setContentView(R.layout.activity_edit_friends);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ParseQuery query = ParseUser.getQuery();
+        query.orderByAscending(ParseConstants.KEY_USERNAME);
+        query.setLimit(1000);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
