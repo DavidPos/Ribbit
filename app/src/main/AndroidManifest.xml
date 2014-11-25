@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".RibbitApplication"
+        android:name="sailloft.ribbit.RibbitApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -29,9 +29,22 @@
         <activity
             android:name="sailloft.ribbit.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Login_Activity">
+            android:parentActivityName="sailloft.ribbit.Login_Activity"
+            android:screenOrientation="portrait" >
+        </activity>
 
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="1e106a6bb73557bc7a90afb120bcb695496a244a" />
+
+        <activity
+            android:name="sailloft.ribbit.EditFriendsActivity"
+            android:label="@string/title_activity_edit_friends"
+            android:parentActivityName="sailloft.ribbit.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sailloft.ribbit.MainActivity"
+                android:screenOrientation="portrait"/>
         </activity>
     </application>
 

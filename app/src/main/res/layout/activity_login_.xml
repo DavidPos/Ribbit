@@ -41,5 +41,11 @@
         android:text="@string/sign_up_text"
         android:id="@+id/signUpText"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"/>
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/twitter_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signUpText"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
