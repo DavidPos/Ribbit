@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name="sailloft.ribbit.RibbitApplication"
@@ -40,11 +45,20 @@
         <activity
             android:name="sailloft.ribbit.EditFriendsActivity"
             android:label="@string/title_activity_edit_friends"
-            android:parentActivityName="sailloft.ribbit.MainActivity" >
+            android:parentActivityName="sailloft.ribbit.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="sailloft.ribbit.MainActivity"
-                android:screenOrientation="portrait"/>
+                android:value="sailloft.ribbit.MainActivity" />
+        </activity>
+        <activity
+            android:name="sailloft.ribbit.RecipientsActivity"
+            android:label="@string/title_activity_recipients"
+            android:parentActivityName="sailloft.ribbit.MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sailloft.ribbit.MainActivity" />
         </activity>
     </application>
 

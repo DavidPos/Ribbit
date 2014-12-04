@@ -5,7 +5,6 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -25,7 +24,7 @@ public class EditFriendsActivity extends ListActivity {
     public static String TAG = EditFriendsActivity.class.getSimpleName();
 
     protected List<ParseUser> mUsers;
-    protected ParseRelation mFriendsRelation;
+    protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
 
 
@@ -42,15 +41,18 @@ public class EditFriendsActivity extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         mCurrentUser = ParseUser.getCurrentUser();
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
+
         setProgressBarVisibility(true);
-        ParseQuery query = ParseUser.getQuery();
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.orderByAscending(ParseConstants.KEY_USERNAME);
         query.setLimit(1000);
-        query.findInBackground(new FindCallback() {
+        query.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List users, ParseException e) {
+            public void done(List<ParseUser> users, ParseException e) {
                 setProgressBarVisibility(false);
                 if(e == null){
                     //Success
@@ -65,6 +67,7 @@ public class EditFriendsActivity extends ListActivity {
                             EditFriendsActivity.this, android.R.layout.simple_list_item_checked,
                             usernames);
                     setListAdapter(adapter);
+                    addFriendCheckMarks();
 
                 }
                 else {
@@ -80,6 +83,29 @@ public class EditFriendsActivity extends ListActivity {
         });
     }
 
+    private void addFriendCheckMarks() {
+        mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> friends, ParseException e) {
+                    if (e ==  null){
+                        for (int i = 0; i < mUsers.size(); i++){
+                          ParseUser user =  mUsers.get(i);
+                          for (ParseUser friend : friends){
+                              if (friend.getObjectId().equals(user.getObjectId())){
+                                  getListView().setItemChecked(i, true);
+                              }
+
+                          }
+
+                        }
+                    }
+                    else {
+                        Log.e(TAG, e.getMessage());
+                    }
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -87,25 +113,21 @@ public class EditFriendsActivity extends ListActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        mFriendsRelation.add(mUsers.get(position));
+        if (getListView().isItemChecked(position)){
+            mFriendsRelation.add(mUsers.get(position));
+        }
+        else{
+            //Remove Friend
+            mFriendsRelation.remove(mUsers.get(position));
+
+        }
+
         mCurrentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -114,5 +136,7 @@ public class EditFriendsActivity extends ListActivity {
                 }
             }
         });
+
+
     }
 }
