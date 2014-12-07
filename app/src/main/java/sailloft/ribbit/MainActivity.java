@@ -26,8 +26,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 ;
@@ -71,6 +71,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
                         startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                     }
+                    break;
 
                 case 1://take video
                     Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -85,14 +86,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                         videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
                         startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
                     }
+                    break;
                 case 2://choose pic
                     Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     choosePhotoIntent.setType("image/*");
                     startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
+                    break;
                 case 3://choose vid
                     Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     chooseVideoIntent.setType("video/*");
-                    Toast.makeText(MainActivity.this, getString(R.string.video_file_size_warning), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.video_size_limit_warning), Toast.LENGTH_LONG).show();
 
                     startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
                     break;
@@ -239,11 +242,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                         fileSize = inputStream.available();
 
                     } catch (FileNotFoundException e) {
-                        Toast.makeText(this, getString(R.string.error_opening_file), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.error_selecting_file), Toast.LENGTH_LONG).show();
                         return;
                     }
                     catch (IOException e){
-                        Toast.makeText(this, getString(R.string.error_opening_file), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.error_selecting_file), Toast.LENGTH_LONG).show();
                         return;
                     }
                     finally {
@@ -254,7 +257,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                         }
                     }
                     if (fileSize >= FILE_SIZE_LIMIT){
-                        Toast.makeText(this, getString(R.string.error_file_size_too_large), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.error_file_too_large), Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
@@ -264,6 +267,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
             }
+            Intent recipientIntent = new Intent(this,RecipientsActivity.class);
+            recipientIntent.setData(mMediaUri);
+            String fileType;
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
+                fileType = ParseConstants.TYPE_IMAGE;
+            }
+            else {
+                fileType = ParseConstants.TYPE_VIDEO;
+            }
+            recipientIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
+            startActivity(recipientIntent);
 
         }
         else if (requestCode != RESULT_CANCELED){
@@ -300,10 +314,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
            case R.id.action_logout:
                ParseUser.logOut();
                navigateToLogin();
+               break;
 
            case R.id.action_edit_friends:
                Intent intent = new Intent(this, EditFriendsActivity.class);
                startActivity(intent);
+               break;
 
            case R.id.action_camera:
                AlertDialog.Builder builder = new AlertDialog.Builder(this);
