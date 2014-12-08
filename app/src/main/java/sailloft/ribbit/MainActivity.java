@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 ;
@@ -45,6 +47,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public static final int FILE_SIZE_LIMIT = 1024*1024*10;//10MB
     protected Uri mMediaUri;
+
 
 
     /**
@@ -217,6 +220,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             .setTabListener(this));
         }
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
