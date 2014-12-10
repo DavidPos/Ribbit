@@ -36,7 +36,7 @@ public class InboxFragment extends ListFragment {
         super.onResume();
         getActivity().setProgressBarIndeterminate(true);
 
-        ParseQuery<ParseObject> query = new ParseQuery(ParseConstants.CLASS_MESSAGES);
+        ParseQuery query = new ParseQuery(ParseConstants.CLASS_MESSAGES);
         query.whereEqualTo(ParseConstants.KEY_RECIPIENT_IDS, ParseUser.getCurrentUser().getObjectId());
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -84,6 +84,10 @@ public class InboxFragment extends ListFragment {
         }
         else{
             //View video
+            Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
+            intent.setDataAndType(fileUri, "video/*");
+            startActivity(intent);
+
         }
     }
 }

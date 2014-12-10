@@ -16,3 +16,4 @@
 #   public *;
 #}
 -include ../proguard-com.twitter.sdk.android.twitter.txt
+-dontwarn com.squareup.okhttp.**
