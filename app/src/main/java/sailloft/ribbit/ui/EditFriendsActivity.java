@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -14,12 +17,16 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
 import sailloft.ribbit.R;
 import sailloft.ribbit.adapters.UserAdapter;
 import sailloft.ribbit.utilis.ParseConstants;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 
 public class EditFriendsActivity extends Activity {
@@ -39,6 +46,7 @@ public class EditFriendsActivity extends Activity {
         setContentView(R.layout.user_grid);
         mGridView = (GridView) findViewById(R.id.friendsGrid);
         mGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        mGridView.setOnItemClickListener(mOnItemClickListener);
         TextView emptyTextView = (TextView)findViewById(android.R.id.empty);
         mGridView.setEmptyView(emptyTextView);
     }
@@ -117,30 +125,32 @@ public class EditFriendsActivity extends Activity {
         return true;
     }
 
+    protected AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ImageView checkImageView = (ImageView)view.findViewById(R.id.checkImageView);
 
+            if (mGridView.isItemChecked(position)){
+                mFriendsRelation.add(mUsers.get(position));
+                checkImageView.setVisibility(VISIBLE);
+            }
+            else{
+                //Remove Friend
+                mFriendsRelation.remove(mUsers.get(position));
+                checkImageView.setVisibility(INVISIBLE);
 
+            }
 
-//    @Override
-//    protected void onListItemClick(ListView l, View v, int position, long id) {
-//        super.onListItemClick(l, v, position, id);
-//        if (getListView().isItemChecked(position)){
-//            mFriendsRelation.add(mUsers.get(position));
-//        }
-//        else{
-//            //Remove Friend
-//            mFriendsRelation.remove(mUsers.get(position));
-//
-//        }
-//
-//        mCurrentUser.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e != null){
-//                    Log.e(TAG, e.getMessage());
-//                }
-//            }
-//        });
-//
-//
-//    }
+            mCurrentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null){
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            });
+
+        }
+    };
+
 }
