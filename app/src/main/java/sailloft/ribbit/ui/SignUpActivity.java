@@ -16,6 +16,7 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import sailloft.ribbit.R;
+import sailloft.ribbit.RibbitApplication;
 
 
 public class SignUpActivity extends Activity {
@@ -75,6 +76,7 @@ public class SignUpActivity extends Activity {
                      public void done(ParseException e) {
                          if (e == null){
                              //Success
+                             RibbitApplication.updateParseInstallation(ParseUser.getCurrentUser());
                              Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
                              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

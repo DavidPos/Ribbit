@@ -3,10 +3,15 @@ package sailloft.ribbit;
 import android.app.Application;
 
 import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
+import com.parse.PushService;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import io.fabric.sdk.android.Fabric;
+import sailloft.ribbit.ui.MainActivity;
+import sailloft.ribbit.utilis.ParseConstants;
 
 /**
  * Created by David's  on 11/18/2014.
@@ -25,7 +30,15 @@ public class RibbitApplication extends Application {
         Fabric.with(this, new Twitter(authConfig));
         Parse.initialize(this, "ks64XVIoheO9yiqXG98F946Q4IsVSfXY5Icj6c9F", "ykRHcHJBRmPzD01WAh2JMkYfCCSq8GYrwWbKdpSl");
 
+        PushService.setDefaultPushCallback(this, MainActivity.class);
+
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+
 
     }
-
+    public static void updateParseInstallation(ParseUser user){
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put(ParseConstants.KEY_USER_ID, user.getObjectId());
+        installation.saveInBackground();
+    }
 }

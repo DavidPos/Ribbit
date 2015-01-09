@@ -19,6 +19,7 @@ import com.parse.ParseUser;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import sailloft.ribbit.R;
+import sailloft.ribbit.RibbitApplication;
 
 public class Login_Activity extends Activity {
     private TwitterLoginButton loginButton;
@@ -81,6 +82,7 @@ public class Login_Activity extends Activity {
                             setProgressBarVisibility(false);
                             if (e == null){
                                 //success
+                                RibbitApplication.updateParseInstallation(user);
                                 Intent intent = new Intent(Login_Activity.this,MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
